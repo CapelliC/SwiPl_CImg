@@ -33,7 +33,36 @@ template<typename Obj> Obj* pq_cast(T ptr) { return static_cast<Obj*>(static_cas
 ptrcast(tImg, TImg)
 ptrcast(tImgDisplay, TImgDisplay)
 
+// utility: convert a list of integers to a vector
+vector<int> deco_list(PlTerm t) {
+    PlTail q(t);
+    PlTerm v;
+    vector<int> r;
+    while (q.next(v))
+        r.push_back(v);
+    return r;
+}
+
 // CImg constructors and methods
+
+#undef PROLOG_MODULE
+#define PROLOG_MODULE "cImg"
+
+PREDICATE(new,2){
+    auto x = new tImg((const char*)PL_A1);
+    PL_A2 = x;
+    return TRUE;
+}
+PREDICATE(new,6) {
+    int size_x = PL_A1;
+    int size_y = PL_A2;
+    int size_z = PL_A3;
+    int size_c = PL_A4;
+    int value = PL_A5;
+    PL_A6 = new tImg(size_x, size_y, size_z, size_c, value);
+    return TRUE;
+}
+/*
 PREDICATE(cImg,2) {
     auto x = new tImg((const char*)PL_A1);
     PL_A2 = x;
@@ -48,24 +77,23 @@ PREDICATE(cImg,6) {
     PL_A6 = new tImg(size_x, size_y, size_z, size_c, value);
     return TRUE;
 }
+*/
+PREDICATE(delete,1) {
+    auto i = TImg(PL_A1);
+    delete i;
+    return TRUE;
+}
 PREDICATE(cImg_free,1) {
     auto i = TImg(PL_A1);
     delete i;
     return TRUE;
 }
+
 PREDICATE(blur,2) {
     auto pImg = TImg(PL_A1);
     double b = PL_A2;
     pImg->blur(b);
     return TRUE;
-}
-vector<int> deco_list(PlTerm t) {
-    PlTail q(t);
-    PlTerm v;
-    vector<int> r;
-    while (q.next(v))
-        r.push_back(v);
-    return r;
 }
 PREDICATE(get_crop,3) {
     auto pImg = TImg(PL_A1);
@@ -111,12 +139,24 @@ PREDICATE(display,2) {
 }
 
 // CImgDisplay constructors and methods
+
+#undef PROLOG_MODULE
+#define PROLOG_MODULE "cImgDisplay"
+
+PREDICATE(new,3) {
+    auto pImg = TImg(PL_A1);
+    const char *title = PL_A2;
+    PL_A3 = new tImgDisplay(*pImg, title);
+    return TRUE;
+}
+/*
 PREDICATE(cImgDisplay,3) {
     auto pImg = TImg(PL_A1);
     const char *title = PL_A2;
     PL_A3 = new tImgDisplay(*pImg, title);
     return TRUE;
 }
+*/
 PREDICATE(is_closed,1) {
     auto pImgDisplay = TImgDisplay(PL_A1);
     return pImgDisplay->is_closed();

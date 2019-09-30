@@ -4,6 +4,7 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 INCLUDEPATH += ../CImg
+
 unix {
     INCLUDEPATH += /home/carlo/lib/swipl/include
     LIBS += -L/home/carlo/lib/swipl/lib/x86_64-linux -lswipl
@@ -11,11 +12,11 @@ unix {
 }
 
 SOURCES += \
-        main.cpp \
+    main.cpp \
     swipl_cimg.cpp
 
 HEADERS += \
     swipl_cimg.h
 
 DISTFILES += \
-    example.pl
+    examples/getting_started.pl
